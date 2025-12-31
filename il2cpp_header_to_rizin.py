@@ -7,7 +7,9 @@ inheritance_pattern = re.compile(r": (\w+) {")
     unnamed_union_count = 0
 
     def name_unnamed_union(m):
+        nonlocal unnamed_union_count
         unnamed_union_count += 1
+
         return f"union u{unnamed_union_count}"
 
     with open("il2cpp.h", "r") as f:
