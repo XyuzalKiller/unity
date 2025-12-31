@@ -26,7 +26,7 @@ if __name__ == "__main__":
         )
 
         data = inheritance_pattern.sub(
-            r"{\n \1 super;",
+            r"{\n\1 super;",
             data
         )
 
