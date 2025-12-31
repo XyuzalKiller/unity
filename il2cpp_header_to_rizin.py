@@ -1,7 +1,7 @@
 import re
 
 def main():
-inheritance_pattern = re.compile(r": (\w+) {")
+    inheritance_pattern = re.compile(r": (\w+) {")
 
     unnamed_union_pattern = re.compile(r"union(?=\s*{)")
     unnamed_union_count = 0
