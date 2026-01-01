@@ -1,9 +1,6 @@
 import re
 
 def main():
-    inheritance_pattern = re.compile(r": (\w+) {")
-
-    unnamed_union_pattern = re.compile(r"union\s*\{.*?\}(?=;)", re.DOTALL)
     unnamed_union_count = 0
 
     def name_unnamed_union(m):
@@ -23,16 +20,24 @@ def main():
         )
 
         data = data.replace(
-            "Il2CppRGCTXData* rgctx_data;", 
+            "Il2CppRGCTXData* rgctx_data;",
             "void* rgctx_data;"
         )
 
-        data = inheritance_pattern.sub(
+        data = re.sub(
+            r": (\w+) {",
             r"{\n\1 super;",
             data
         )
 
-        data = unnamed_union_pattern.sub(
+        data = re.sub(
+            r"union\s*{\s*const void\* rgctx_data;\s*const void\* methodMetadataHandle;\s*};\s*union\s*{\s*const void\* genericMethod;\s*const void\* genericContainerHandle;\s*};",
+            "const void* rgctx_data;\nconst void* genericMethod;",
+            data
+        )
+
+        data = re.sub(
+            r"(?s)union\s*\{.*?\}(?=;)",
             name_unnamed_union,
             data
         )
