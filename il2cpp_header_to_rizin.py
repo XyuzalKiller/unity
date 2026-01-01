@@ -21,11 +21,6 @@ def main():
             1
         )
 
-        data = data.replace(
-            "Il2CppRGCTXData*",
-            "void*"
-        )
-
         data = inheritance_pattern.sub(
             r"{\n\1 super;",
             data
