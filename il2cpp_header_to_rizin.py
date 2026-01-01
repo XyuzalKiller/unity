@@ -21,13 +21,13 @@ def main():
             1
         )
 
-        data = unnamed_union_pattern.sub(
-            name_unnamed_union,
+        data = inheritance_pattern.sub(
+            r"{\n\1 super;",
             data
         )
 
-        data = inheritance_pattern.sub(
-            r"{\n\1 super;",
+        data = unnamed_union_pattern.sub(
+            name_unnamed_union,
             data
         )
 
