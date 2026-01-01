@@ -26,14 +26,22 @@ def main():
 
         data = re.sub(
             r": (\w+) {",
-            r"{\n    \1 super;",
+            r"{\n\1 super;",
             data
         )
 
         data = re.sub(
-            r"union\s*{\s*const void\* rgctx_data;\s*const void\* methodMetadataHandle;\s*};\s*union\s*{\s*const void\* genericMethod;\s*const void\* genericContainerHandle;\s*};",
-            "const void* rgctx_data;\n    const void* genericMethod;",
-            data
+            r"union\s*{\s*const void\* rgctx_data;\s*const void\* methodMetadataHandle;\s*};",
+            "const void* rgctx_data;",
+            data,
+            count=1
+        )
+
+        data = re.sub(
+            r"union\s*{\s*const void\* genericMethod;\s*const void\* genericContainerHandle;\s*};",
+            "const void* genericMethod;",
+            data,
+            count=1
         )
 
         data = re.sub(
