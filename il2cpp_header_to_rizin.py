@@ -4,7 +4,7 @@ def main():
     il2cpp_rgctx_data_pattern = re.compile(r"union Il2CppRGCTXData\s\{.*?\}", re.DOTALL)
     inheritance_pattern = re.compile(r": (\w+) {")
 
-    unnamed_union_pattern = re.compile(r"union\s\{.*?\}(?=;)", re.DOTALL)
+    unnamed_union_pattern = re.compile(r"union\s*\{.*?\}(?=;)", re.DOTALL)
     unnamed_union_count = 0
 
     def name_unnamed_union(m):
@@ -23,11 +23,11 @@ def main():
             1
         )
 
-        #data = il2cpp_rgctx_data_pattern.sub(
-        #    "typedef void* Il2CppRGCTXData",
-        #    data,
-        #    count=1
-        #)
+        data = il2cpp_rgctx_data_pattern.sub(
+            "typedef void* Il2CppRGCTXData",
+            data,
+            count=1
+        )
 
         data = inheritance_pattern.sub(
             r"{\n\1 super;",
