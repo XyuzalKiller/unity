@@ -23,7 +23,7 @@ def main():
 
         data = data.replace(
             "Il2CppRGCTXData*",
-            "void*"
+            "union Il2CppRGCTXData*"
         )
 
         data = inheritance_pattern.sub(
