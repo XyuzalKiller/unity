@@ -3,7 +3,7 @@ import re
 def main():
     inheritance_pattern = re.compile(r": (\w+) {")
 
-    unnamed_union_pattern = re.compile(r"union\s*\{.*\}(?=;)", re.DOTALL)
+    unnamed_union_pattern = re.compile(r"union\s*\{.*?\}(?=;)", re.DOTALL)
     unnamed_union_count = 0
 
     def name_unnamed_union(m):
