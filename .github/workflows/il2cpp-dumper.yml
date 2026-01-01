@@ -1,0 +1,52 @@
+name: IL2CPPDumper
+
+on: workflow_dispatch
+
+jobs:
+  il2cpp-dumper:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 7.x
+
+      - name: Checkout Files
+        uses: actions/checkout@v6
+        with:
+          ref: files
+
+      - name: Extract Files
+        run: zstd -d libil2cpp.so.zst global-metadata.dat.zst
+
+      - name: Run IL2CPPDumper
+        run: |
+          curl -L -o il2cppdumper.zip https://github.com/Perfare/Il2CppDumper/releases/download/v6.7.46/Il2CppDumper-net7-v6.7.46.zip
+          unzip il2cppdumper.zip
+
+          jq '(.RequireAnyKey, .GenerateDummyDll, .DumpTypeDefIndex) = false' config.json > tmp && mv tmp config.json
+          dotnet Il2CppDumper.dll libil2cpp.so global-metadata.dat
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: dump
+          path: dump.cs
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: il2cpp
+          path: il2cpp.h
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: script
+          path: script.json
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: stringliteral
+          path: stringliteral.json

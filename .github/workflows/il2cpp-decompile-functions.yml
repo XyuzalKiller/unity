@@ -1,0 +1,62 @@
+name: IL2CPP Decompile Functions
+
+on:
+  workflow_dispatch:
+    inputs:
+      class_name:
+        required: true
+        description: Class Name
+        default: EnemyAIGrandpa
+        type: string
+
+jobs:
+  il2cpp-decompile-functions:
+    runs-on: ubuntu-latest
+    container: kalilinux/kali-rolling
+    steps:
+      - name: Install Prerequisites
+        run: apt-get update && apt-get install -y --no-install-recommends unzip zstd jq curl ca-certificates python3 rizin rz-ghidra
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 7.x
+
+      - name: Checkout Files
+        uses: actions/checkout@v6
+        with:
+          ref: files
+
+      - name: Extract Files
+        run: zstd -d libil2cpp.so.zst global-metadata.dat.zst
+
+      - name: Run IL2CPPDumper
+        run: |
+          curl -L -o il2cppdumper.zip https://github.com/Perfare/Il2CppDumper/releases/download/v6.7.46/Il2CppDumper-net7-v6.7.46.zip
+          unzip il2cppdumper.zip
+
+          jq '(.RequireAnyKey, .GenerateDummyDll) = false' config.json > tmp && mv tmp config.json
+          dotnet Il2CppDumper.dll libil2cpp.so global-metadata.dat
+
+      - name: Decompile Functions
+        run: |
+          python3 il2cpp_header_to_rizin.py
+          jq -r --arg class_name "${{ inputs.class_name }}" '
+            "to il2cpp_rizin.h",
+            (.ScriptMethod[] | "f func.\(.Name | gsub("\\W"; "_")) @ \(.Address)"),
+            (.ScriptMethod[] | select(.Name | contains($class_name)) | "s \(.Address)", "af", "afs \(.Signature | sub(", const MethodInfo\\* \\w+"; ""))", "pdg > \(.Name | gsub("\\W"; "_")).c")
+          ' script.json > commands.rz
+
+          rizin -i commands.rz libil2cpp.so || true
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: decompiled-functions
+          path: "*.c"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: il2cpp_rizin
+          path: il2cpp_rizin.h

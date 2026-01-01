@@ -1,0 +1,28 @@
+name: List Symbols
+
+on: workflow_dispatch
+
+jobs:
+  list-symbols:
+    runs-on: ubuntu-latest
+    container: kalilinux/kali-rolling
+    steps:
+      - name: Install Prerequisites
+        run: apt-get update && apt-get install -y --no-install-recommends zstd rizin
+
+      - name: Checkout Files
+        uses: actions/checkout@v6
+        with:
+          ref: files
+
+      - name: Extract Files
+        run: zstd -d libil2cpp.so.zst
+
+      - name: List Symbols
+        run: rz-bin -s libil2cpp.so > symbols.txt
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: symbols
+          path: symbols.txt
