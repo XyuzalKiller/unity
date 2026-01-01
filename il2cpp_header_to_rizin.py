@@ -19,24 +19,6 @@ def main():
             1
         )
 
-        data = data.replace(
-            "Il2CppRGCTXData* rgctx_data;",
-            "void* rgctx_data;"
-        )
-
-        data = re.sub(
-            r"union\s*{\s*const void\* rgctx_data;\s*const void\* methodMetadataHandle;\s*}",
-            "const void* rgctx_data",
-            data,
-            1
-        )
-
-        data = re.sub(
-            r"union\s*{\s*const void\* genericMethod;\s*const void\* genericContainerHandle;\s*}",
-            "const void* genericMethod",
-            data,
-            1
-        )
 
         data = re.sub(
             r": (\w+) {",
