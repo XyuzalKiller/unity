@@ -23,11 +23,11 @@ def main():
             1
         )
 
-        data = il2cpp_rgctx_data_pattern.sub(
-            "typedef void* Il2CppRGCTXData",
-            data,
-            count=1
-        )
+        #data = il2cpp_rgctx_data_pattern.sub(
+        #    "typedef void* Il2CppRGCTXData",
+        #    data,
+        #    count=1
+        #)
 
         data = inheritance_pattern.sub(
             r"{\n\1 super;",
