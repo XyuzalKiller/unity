@@ -1,7 +1,6 @@
 import re
 
 def main():
-    il2cpp_rgctx_data_pattern = re.compile(r"union Il2CppRGCTXData\s\{.*?\}", re.DOTALL)
     inheritance_pattern = re.compile(r": (\w+) {")
 
     unnamed_union_pattern = re.compile(r"union\s*\{.*?\}(?=;)", re.DOTALL)
@@ -22,12 +21,6 @@ def main():
             "typedef void(*Il2CppMethodPointer)(void);",
             1
         )
-
-        #data = il2cpp_rgctx_data_pattern.sub(
-        #    "typedef void* Il2CppRGCTXData",
-        #    data,
-        #    count=1
-        #)
 
         data = inheritance_pattern.sub(
             r"{\n\1 super;",
