@@ -10,7 +10,7 @@ def main():
         nonlocal unnamed_union_count
         unnamed_union_count += 1
 
-        return f"{m.group(0)[:-1]} u{unnamed_union_count}"
+        return f"{m.group(0)[:-1]} u{unnamed_union_count};"
 
     with open("il2cpp.h", "r") as f:
         data = f.read()
