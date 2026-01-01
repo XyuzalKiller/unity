@@ -16,6 +16,7 @@ def main():
     with open("il2cpp.h", "r") as f:
         data = f.read()
 
+    with open("il2cpp_rizin.h", "w") as f:
         data = data.replace(
             "typedef void(*Il2CppMethodPointer)();",
             "typedef void(*Il2CppMethodPointer)(void);",
@@ -38,7 +39,6 @@ def main():
             data
         )
 
-    with open("il2cpp_rizin.h", "w") as f:
         f.write(data)
 
 if __name__ == "__main__":
