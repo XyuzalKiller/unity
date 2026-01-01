@@ -3,14 +3,14 @@ import re
 def main():
     inheritance_pattern = re.compile(r": (\w+) {")
 
-    unnamed_union_pattern = re.compile(r"union\s*\{.*?\}(?=;)", re.DOTALL)
+    unnamed_union_pattern = re.compile(r"union\s*\{.*?\};", re.DOTALL)
     unnamed_union_count = 0
 
     def name_unnamed_union(m):
         nonlocal unnamed_union_count
         unnamed_union_count += 1
 
-        return f"{m.group(0)} u{unnamed_union_count}"
+        return f"{m.group(0)[:-1]} u{unnamed_union_count}"
 
     with open("il2cpp.h", "r") as f:
         data = f.read()
