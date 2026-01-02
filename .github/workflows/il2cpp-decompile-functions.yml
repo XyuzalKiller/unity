@@ -50,7 +50,7 @@ jobs:
               "afs \(.Signature | sub(", const MethodInfo\\* \\w+"; ""))"
             ),
             (.ScriptMethod[] | select(.Name | contains($class_name)) |
-               "pdg @ \(.Address) > \(.Name | gsub("\\W"; "_")).c"
+               "pdg > \(.Name | gsub("\\W"; "_")).c @ \(.Address)"
             )
           ' script.json > commands.rz
 
