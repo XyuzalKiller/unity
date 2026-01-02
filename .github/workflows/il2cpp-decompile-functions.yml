@@ -38,9 +38,6 @@ jobs:
           jq '(.RequireAnyKey, .GenerateDummyDll) = false' config.json > tmp && mv tmp config.json
           dotnet Il2CppDumper.dll libil2cpp.so global-metadata.dat
 
-      - name: Debug Rizin Options
-        run: rizin -c "el~analysis" libil2cpp.so
-
       - name: Decompile Functions
         run: |
           python3 il2cpp_header_to_rizin.py
@@ -57,7 +54,7 @@ jobs:
             )
           ' script.json > commands.rz
 
-          rizin -i commands.rz libil2cpp.so || true
+          rizin -e analysis.hasnext false -e analysis.jmp.after false -i commands.rz libil2cpp.so || true
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v6
