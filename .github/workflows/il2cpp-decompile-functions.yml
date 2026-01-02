@@ -50,11 +50,11 @@ jobs:
               "afs \(.Signature | sub(", const MethodInfo\\* \\w+"; ""))"
             ),
             (.ScriptMethod[] | select(.Name | contains($class_name)) |
-               "pdg > \(.Name | gsub("\\W"; "_")).c @ \(.Address)"
+               "pdg @ \(.Address) > \(.Name | gsub("\\W"; "_")).c"
             )
           ' script.json > commands.rz
 
-          rizin -e analysis.hasnext false -e analysis.jmp.after false -i commands.rz libil2cpp.so || true
+          rizin -e analysis.hasnext=false -e analysis.jmp.after=false -i commands.rz libil2cpp.so || true
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v6
